@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Valentine ❤️</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI,sans-serif;
+background:linear-gradient(to right,#ffdde1,#ee9ca7);
+text-align:center;
+color:white;
+overflow-x:hidden;
+}
+
+/* LOADING */
+#loadingScreen{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.heartLoader{
+width:80px;
+height:80px;
+background:red;
+transform:rotate(45deg);
+animation:pulse 1s infinite;
+position:relative;
+}
+
+.heartLoader:before,
+.heartLoader:after{
+content:"";
+position:absolute;
+width:80px;
+height:80px;
+background:red;
+border-radius:50%;
+}
+
+.heartLoader:before{top:-40px;left:0;}
+.heartLoader:after{left:-40px;top:0;}
+
+@keyframes pulse{
+0%{transform:scale(1) rotate(45deg);}
+50%{transform:scale(1.2) rotate(45deg);}
+100%{transform:scale(1) rotate(45deg);}
+}
+
+section{
+padding:60px 20px;
+display:none;
+}
+
+h1{font-size:38px;}
+h2{margin-bottom:20px;}
+
+button{
+padding:15px 30px;
+font-size:18px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+margin:10px;
+transition:0.3s;
+}
+
+.yes{
+background:#ff4b5c;
+color:white;
+}
+
+.no{
+background:white;
+color:#ff4b5c;
+}
+
+img{
+width:280px;
+border-radius:20px;
+margin:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+img:hover{
+transform:scale(1.05);
+}
+
+.dateBlock{
+background:rgba(255,255,255,0.2);
+padding:20px;
+margin:20px auto;
+border-radius:15px;
+width:80%;
+backdrop-filter:blur(5px);
+}
+
+#start{display:block;}
+</style>
+</head>
+
+<body>
+
+<div id="loadingScreen">
+<div class="heartLoader"></div>
+</div>
+
+<audio id="bgmusic" autoplay loop>
+<source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<section id="start">
+<h1>Hey Vaibhu ❤️</h1>
+<p>Before anything else...</p>
+<button onclick="startSite()">Continue</button>
+</section>
+
+<section id="question">
+<h1>Will You Be My Valentine? 💖</h1>
+<button class="yes" id="yesBtn" onclick="yesClicked()">Yes ❤️</button>
+<button class="no" onclick="noClicked()">No 🙈</button>
+</section>
+
+<section id="gallery">
+<h2>One Day......</h2>
+<img src="photo1.jpg">
+<img src="photo2.jpg">
+<img src="photo3.jpg">
+<img src="photo4.jpg">
+<img src="photo5.jpg">
+<img src="photo6.jpg">
+</section>
+
+<section id="crushMoment">
+<h2>The Image Jis Se Crush Aya Tha</h2>
+<img src="crush.jpg">
+<p>
+Ye wahi image hai.<br>
+Jis din maine ye dekhi thi,<br>
+tab bas crush shuru hua tha.<br><br>
+
+Aur phir woh raat...<br>
+jab tum pehli baar drunk thi.<br><br>
+
+Uss din pata nahi kya tha,<br>
+but I felt a connection between us.<br><br>
+
+Tab laga ye sirf crush nahi hai.
+</p>
+</section>
+
+<section id="timeline">
+<h2>Our Story</h2>
+
+<div class="dateBlock">
+<h3>9 August</h3>
+<p>The day we first talked.<br>
+Tab bas baat shuru hui thi.<br>
+Ab kahani chal rahi hai.</p>
+</div>
+
+<div class="dateBlock">
+<h3>14 December</h3>
+<p>The day Vaibhu confessed.<br>
+Uss din laga — I don’t want this to end.</p>
+</div>
+</section>
+
+<section id="promises">
+<h2>My Promises To You</h2>
+<p>I'll always be with you.</p>
+<p>I'll help you every time, every moment.</p>
+<p>I love you no matter what.</p>
+<p>I'll improve myself.</p>
+<p>I will prove myself in every aspect.</p>
+</section>
+
+<section id="finalNote">
+<h2>For You</h2>
+<p>
+Since then, it’s been you.<br>
+Through overthinking.<br>
+Through fights.<br>
+Through silence.<br><br>
+You are the best thing that ever happened to me.
+</p>
+</section>
+
+<section id="lyrics">
+<h2>Just For You</h2>
+<p>
+Kudde man vich bas tera he khyal<br>
+Akhan meech gabru fer theek so janda ae<br>
+Mai uth da ae ni haseen pal raat de ne<br>
+Tere aunde nit khoyab menu<br>
+Ena husan kyon dita rabb ne ?<br>
+Naina vich roshini tu paa deve'n<br>
+Shant hun rehn jehe lag paye<br>
+Rooleyan to pare'n pattu hatt ge<br>
+Kan bas sunde ne sajna nu<br>
+Raag chato peher terr he ta wajj de
+</p>
+</section>
+
+<script>
+
+let noCount=0;
+let clickedNo=false;
+
+window.onload=function(){
+setTimeout(()=>{
+document.getElementById("loadingScreen").style.display="none";
+},1000);
+
+const music=document.getElementById("bgmusic");
+music.play().catch(()=>{});
+};
+
+function startSite(){
+document.getElementById("start").style.display="none";
+document.getElementById("question").style.display="block";
+}
+
+const popups=[
+"Really ? 😏",
+"Ummmmmm ?",
+"Try clicking on Yes.",
+"You mean Yes ?",
+"Overthinking again?",
+"Stop pretending.",
+"Click properly.",
+"You sure about that?",
+"That didn’t sound confident.",
+"You’re smiling right now.",
+"Drama queen alert.",
+"Heart says Yes though."
+];
+
+function noClicked(){
+clickedNo=true;
+alert(popups[Math.floor(Math.random()*popups.length)]);
+noCount++;
+document.getElementById("yesBtn").style.transform="scale("+(1+noCount*0.1)+")";
+}
+
+function yesClicked(){
+if(clickedNo){
+alert("Mujhe pta he tha tum meri diwani ho 😌");
+alert("Meri pyaari biharan ❤️");
+alert("This Punjabi loves you.");
+}else{
+alert("You just made me the happiest person alive ❤️");
+}
+
+document.getElementById("question").style.display="none";
+document.getElementById("gallery").style.display="block";
+document.getElementById("crushMoment").style.display="block";
+document.getElementById("timeline").style.display="block";
+document.getElementById("promises").style.display="block";
+document.getElementById("finalNote").style.display="block";
+document.getElementById("lyrics").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
