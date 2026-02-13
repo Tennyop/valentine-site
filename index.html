@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Valentine ❤️</title>
 
+
 <style>
 body{
 margin:0;
@@ -13,6 +14,7 @@ text-align:center;
 color:white;
 overflow-x:hidden;
 }
+
 
 /* Floating hearts */
 .heart{
@@ -28,7 +30,8 @@ z-index:0;
 100%{transform:translateY(-110vh) scale(1.5);opacity:0;}
 }
 
-/* ===== NEW CINEMATIC LOADER ===== */
+
+/* Loader */
 #loadingScreen{
 position:fixed;
 width:100%;
@@ -40,6 +43,7 @@ align-items:center;
 z-index:9999;
 transition:opacity 0.6s ease;
 }
+
 
 .loveLoader{
 width:120px;
@@ -54,15 +58,18 @@ stroke-dashoffset:600;
 animation:drawHeart 1.2s ease forwards, glowPulse 1.5s ease-in-out infinite;
 }
 
+
 @keyframes drawHeart{
 to{stroke-dashoffset:0;}
 }
+
 
 @keyframes glowPulse{
 0%{filter:drop-shadow(0 0 5px #ff4b5c);}
 50%{filter:drop-shadow(0 0 25px #ff4b5c);}
 100%{filter:drop-shadow(0 0 5px #ff4b5c);}
 }
+
 
 /* Sections */
 section{
@@ -79,8 +86,10 @@ opacity:1;
 transform:translateY(0);
 }
 
+
 h1{font-size:38px;}
 h2{margin-bottom:20px;}
+
 
 button{
 padding:15px 30px;
@@ -93,20 +102,24 @@ transition:0.3s;
 position:relative;
 }
 
+
 button:hover{
 transform:scale(1.1);
 box-shadow:0 0 20px rgba(255,255,255,0.8);
 }
+
 
 .yes{
 background:#ff4b5c;
 color:white;
 }
 
+
 .no{
 background:white;
 color:#ff4b5c;
 }
+
 
 img{
 width:280px;
@@ -119,6 +132,7 @@ img:hover{
 transform:scale(1.08);
 }
 
+
 .dateBlock{
 background:rgba(255,255,255,0.2);
 padding:20px;
@@ -128,9 +142,11 @@ width:80%;
 backdrop-filter:blur(5px);
 }
 
+
 #start{display:block;opacity:1;transform:none;}
 
-/* Internal popup */
+
+/* Popup */
 #popup{
 position:fixed;
 bottom:40px;
@@ -153,7 +169,9 @@ transform:translateX(-50%) translateY(0);
 </style>
 </head>
 
+
 <body>
+
 
 <!-- Loader -->
 <div id="loadingScreen">
@@ -166,11 +184,15 @@ C200 60, 180 110, 100 170 Z"/>
 </svg>
 </div>
 
+
 <div id="popup"></div>
 
-<audio id="bgmusic" autoplay loop>
+
+<!-- Audio -->
+<audio id="bgmusic" loop>
 <source src="love.mp3" type="audio/mpeg">
 </audio>
+
 
 <section id="start">
 <h1>Hey Vaibhu ❤️</h1>
@@ -178,11 +200,13 @@ C200 60, 180 110, 100 170 Z"/>
 <button onclick="startSite()">Continue</button>
 </section>
 
+
 <section id="question">
 <h1>Will You Be My Valentine? 💖</h1>
 <button class="yes" id="yesBtn" onclick="yesClicked()">Yes ❤️</button>
 <button class="no" id="noBtn" onclick="noClicked()">No 🙈</button>
 </section>
+
 
 <section id="gallery">
 <h2>One Day......</h2>
@@ -193,6 +217,7 @@ C200 60, 180 110, 100 170 Z"/>
 <img src="photo5.jpg">
 <img src="photo6.jpg">
 </section>
+
 
 <section id="crushMoment">
 <h2>The Image Jis Se Crush Aya Tha</h2>
@@ -209,6 +234,7 @@ Tab laga ye sirf crush nahi hai.
 </p>
 </section>
 
+
 <section id="timeline">
 <h2>Our Story</h2>
 <div class="dateBlock">
@@ -224,6 +250,7 @@ Uss din laga — I don’t want this to end.</p>
 </div>
 </section>
 
+
 <section id="promises">
 <h2>My Promises To You</h2>
 <p>I'll always be with you.</p>
@@ -232,6 +259,7 @@ Uss din laga — I don’t want this to end.</p>
 <p>I'll improve myself.</p>
 <p>I will prove myself in every aspect.</p>
 </section>
+
 
 <section id="finalNote">
 <h2>For You</h2>
@@ -243,6 +271,7 @@ Through silence.<br><br>
 You are the best thing that ever happened to me.
 </p>
 </section>
+
 
 <section id="lyrics">
 <h2>Just For You</h2>
@@ -260,17 +289,22 @@ Raag chato peher terr he ta wajj de
 </p>
 </section>
 
+
 <script>
+
 
 let noCount=0;
 let clickedNo=false;
 
+
+/* Popup */
 function showPopup(text){
 let popup=document.getElementById("popup");
 popup.innerText=text;
 popup.classList.add("show");
 setTimeout(()=>{popup.classList.remove("show");},1500);
 }
+
 
 /* Floating hearts */
 setInterval(()=>{
@@ -283,7 +317,8 @@ document.body.appendChild(heart);
 setTimeout(()=>{heart.remove();},6000);
 },800);
 
-/* Loader fade out */
+
+/* Loader fade */
 window.onload=function(){
 setTimeout(()=>{
 let loader=document.getElementById("loadingScreen");
@@ -292,16 +327,33 @@ setTimeout(()=>{loader.style.display="none";},600);
 },1200);
 };
 
+
 function showSection(id){
 let sec=document.getElementById(id);
 sec.style.display="block";
 setTimeout(()=>{sec.classList.add("show");},50);
 }
 
+
+/* Start site + play music */
 function startSite(){
+const music=document.getElementById("bgmusic");
+music.volume=0;
+music.play().then(()=>{
+let fade=setInterval(()=>{
+if(music.volume<1){
+music.volume+=0.05;
+}else{
+clearInterval(fade);
+}
+},100);
+}).catch(()=>{});
+
+
 document.getElementById("start").style.display="none";
 showSection("question");
 }
+
 
 const popups=[
 "Really ? 😏",
@@ -314,21 +366,25 @@ const popups=[
 "Heart says Yes though."
 ];
 
+
 function noClicked(){
 clickedNo=true;
 showPopup(popups[Math.floor(Math.random()*popups.length)]);
 noCount++;
+
 
 let noBtn=document.getElementById("noBtn");
 let x=Math.random()*200-100;
 let y=Math.random()*200-100;
 noBtn.style.transform=`translate(${x}px,${y}px)`;
 
+
 if(noCount>=6){
 noBtn.style.display="none";
 showPopup("No option expired 😌");
 }
 }
+
 
 function yesClicked(){
 if(clickedNo){
@@ -339,7 +395,9 @@ setTimeout(()=>showPopup("This Punjabi loves you."),3200);
 showPopup("You just made me the happiest person alive ❤️");
 }
 
+
 document.getElementById("question").style.display="none";
+
 
 showSection("gallery");
 showSection("crushMoment");
@@ -349,7 +407,9 @@ showSection("finalNote");
 showSection("lyrics");
 }
 
+
 </script>
+
 
 </body>
 </html>
