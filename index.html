@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,21 @@ color:white;
 overflow-x:hidden;
 }
 
-/* LOADING */
+/* Floating hearts */
+.heart{
+position:fixed;
+bottom:-20px;
+color:rgba(255,255,255,0.7);
+animation:floatUp 6s linear infinite;
+font-size:20px;
+z-index:0;
+}
+@keyframes floatUp{
+0%{transform:translateY(0) scale(1);}
+100%{transform:translateY(-110vh) scale(1.5);opacity:0;}
+}
+
+/* ===== NEW CINEMATIC LOADER ===== */
 #loadingScreen{
 position:fixed;
 width:100%;
@@ -24,39 +38,45 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:9999;
+transition:opacity 0.6s ease;
 }
 
-.heartLoader{
-width:80px;
-height:80px;
-background:red;
-transform:rotate(45deg);
-animation:pulse 1s infinite;
-position:relative;
+.loveLoader{
+width:120px;
+height:120px;
+fill:none;
+stroke:#ff4b5c;
+stroke-width:8;
+stroke-linecap:round;
+stroke-linejoin:round;
+stroke-dasharray:600;
+stroke-dashoffset:600;
+animation:drawHeart 1.2s ease forwards, glowPulse 1.5s ease-in-out infinite;
 }
 
-.heartLoader:before,
-.heartLoader:after{
-content:"";
-position:absolute;
-width:80px;
-height:80px;
-background:red;
-border-radius:50%;
+@keyframes drawHeart{
+to{stroke-dashoffset:0;}
 }
 
-.heartLoader:before{top:-40px;left:0;}
-.heartLoader:after{left:-40px;top:0;}
-
-@keyframes pulse{
-0%{transform:scale(1) rotate(45deg);}
-50%{transform:scale(1.2) rotate(45deg);}
-100%{transform:scale(1) rotate(45deg);}
+@keyframes glowPulse{
+0%{filter:drop-shadow(0 0 5px #ff4b5c);}
+50%{filter:drop-shadow(0 0 25px #ff4b5c);}
+100%{filter:drop-shadow(0 0 5px #ff4b5c);}
 }
 
+/* Sections */
 section{
 padding:60px 20px;
 display:none;
+opacity:0;
+transform:translateY(40px);
+transition:0.8s ease;
+position:relative;
+z-index:1;
+}
+section.show{
+opacity:1;
+transform:translateY(0);
 }
 
 h1{font-size:38px;}
@@ -70,6 +90,12 @@ border-radius:30px;
 cursor:pointer;
 margin:10px;
 transition:0.3s;
+position:relative;
+}
+
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 20px rgba(255,255,255,0.8);
 }
 
 .yes{
@@ -87,11 +113,10 @@ width:280px;
 border-radius:20px;
 margin:15px;
 box-shadow:0 10px 20px rgba(0,0,0,0.3);
-transition:0.3s;
+transition:0.4s;
 }
-
 img:hover{
-transform:scale(1.05);
+transform:scale(1.08);
 }
 
 .dateBlock{
@@ -103,15 +128,45 @@ width:80%;
 backdrop-filter:blur(5px);
 }
 
-#start{display:block;}
+#start{display:block;opacity:1;transform:none;}
+
+/* Internal popup */
+#popup{
+position:fixed;
+bottom:40px;
+left:50%;
+transform:translateX(-50%) translateY(50px);
+background:white;
+color:#ff4b5c;
+padding:15px 25px;
+border-radius:30px;
+font-weight:bold;
+opacity:0;
+transition:0.4s ease;
+z-index:10000;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+#popup.show{
+opacity:1;
+transform:translateX(-50%) translateY(0);
+}
 </style>
 </head>
 
 <body>
 
+<!-- Loader -->
 <div id="loadingScreen">
-<div class="heartLoader"></div>
+<svg class="loveLoader" viewBox="0 0 200 200">
+<path d="M100 170 
+C20 110, 0 60, 50 40 
+C75 30, 100 50, 100 70 
+C100 50, 125 30, 150 40 
+C200 60, 180 110, 100 170 Z"/>
+</svg>
 </div>
+
+<div id="popup"></div>
 
 <audio id="bgmusic" autoplay loop>
 <source src="love.mp3" type="audio/mpeg">
@@ -126,7 +181,7 @@ backdrop-filter:blur(5px);
 <section id="question">
 <h1>Will You Be My Valentine? 💖</h1>
 <button class="yes" id="yesBtn" onclick="yesClicked()">Yes ❤️</button>
-<button class="no" onclick="noClicked()">No 🙈</button>
+<button class="no" id="noBtn" onclick="noClicked()">No 🙈</button>
 </section>
 
 <section id="gallery">
@@ -146,27 +201,22 @@ backdrop-filter:blur(5px);
 Ye wahi image hai.<br>
 Jis din maine ye dekhi thi,<br>
 tab bas crush shuru hua tha.<br><br>
-
 Aur phir woh raat...<br>
 jab tum pehli baar drunk thi.<br><br>
-
 Uss din pata nahi kya tha,<br>
 but I felt a connection between us.<br><br>
-
 Tab laga ye sirf crush nahi hai.
 </p>
 </section>
 
 <section id="timeline">
 <h2>Our Story</h2>
-
 <div class="dateBlock">
 <h3>9 August</h3>
 <p>The day we first talked.<br>
 Tab bas baat shuru hui thi.<br>
 Ab kahani chal rahi hai.</p>
 </div>
-
 <div class="dateBlock">
 <h3>14 December</h3>
 <p>The day Vaibhu confessed.<br>
@@ -215,18 +265,42 @@ Raag chato peher terr he ta wajj de
 let noCount=0;
 let clickedNo=false;
 
+function showPopup(text){
+let popup=document.getElementById("popup");
+popup.innerText=text;
+popup.classList.add("show");
+setTimeout(()=>{popup.classList.remove("show");},1500);
+}
+
+/* Floating hearts */
+setInterval(()=>{
+const heart=document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(15+Math.random()*20)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>{heart.remove();},6000);
+},800);
+
+/* Loader fade out */
 window.onload=function(){
 setTimeout(()=>{
-document.getElementById("loadingScreen").style.display="none";
-},1000);
-
-const music=document.getElementById("bgmusic");
-music.play().catch(()=>{});
+let loader=document.getElementById("loadingScreen");
+loader.style.opacity="0";
+setTimeout(()=>{loader.style.display="none";},600);
+},1200);
 };
+
+function showSection(id){
+let sec=document.getElementById(id);
+sec.style.display="block";
+setTimeout(()=>{sec.classList.add("show");},50);
+}
 
 function startSite(){
 document.getElementById("start").style.display="none";
-document.getElementById("question").style.display="block";
+showSection("question");
 }
 
 const popups=[
@@ -236,37 +310,43 @@ const popups=[
 "You mean Yes ?",
 "Overthinking again?",
 "Stop pretending.",
-"Click properly.",
 "You sure about that?",
-"That didn’t sound confident.",
-"You’re smiling right now.",
-"Drama queen alert.",
 "Heart says Yes though."
 ];
 
 function noClicked(){
 clickedNo=true;
-alert(popups[Math.floor(Math.random()*popups.length)]);
+showPopup(popups[Math.floor(Math.random()*popups.length)]);
 noCount++;
-document.getElementById("yesBtn").style.transform="scale("+(1+noCount*0.1)+")";
+
+let noBtn=document.getElementById("noBtn");
+let x=Math.random()*200-100;
+let y=Math.random()*200-100;
+noBtn.style.transform=`translate(${x}px,${y}px)`;
+
+if(noCount>=6){
+noBtn.style.display="none";
+showPopup("No option expired 😌");
+}
 }
 
 function yesClicked(){
 if(clickedNo){
-alert("Mujhe pta he tha tum meri diwani ho 😌");
-alert("Meri pyaari biharan ❤️");
-alert("This Punjabi loves you.");
+showPopup("Mujhe pta he tha tum meri diwani ho 😌");
+setTimeout(()=>showPopup("Meri pyaari biharan ❤️"),1600);
+setTimeout(()=>showPopup("This Punjabi loves you."),3200);
 }else{
-alert("You just made me the happiest person alive ❤️");
+showPopup("You just made me the happiest person alive ❤️");
 }
 
 document.getElementById("question").style.display="none";
-document.getElementById("gallery").style.display="block";
-document.getElementById("crushMoment").style.display="block";
-document.getElementById("timeline").style.display="block";
-document.getElementById("promises").style.display="block";
-document.getElementById("finalNote").style.display="block";
-document.getElementById("lyrics").style.display="block";
+
+showSection("gallery");
+showSection("crushMoment");
+showSection("timeline");
+showSection("promises");
+showSection("finalNote");
+showSection("lyrics");
 }
 
 </script>
